@@ -1,0 +1,7 @@
+https://www.researchgate.net/publication/284512691_Introducao_a_Redes_Neurais_Artificiais_com_a_biblioteca_Encog_em_Java
+
+https://github.com/encog/encog-java-core/releases
+
+https://github.com/encog/encog-java-core
+
+http://www.heatonresearch.com/download/
