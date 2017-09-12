@@ -5,3 +5,11 @@ https://github.com/encog/encog-java-core/releases
 https://github.com/encog/encog-java-core
 
 http://www.heatonresearch.com/download/
+
+https://github.com/encog/encog-java-examples
+
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/guide/classification/IrisClassification.java
+
+https://github.com/encog
+
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/neural/xorsql/XORSQL.java
