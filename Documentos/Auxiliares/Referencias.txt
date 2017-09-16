@@ -1,0 +1,15 @@
+https://www.researchgate.net/publication/284512691_Introducao_a_Redes_Neurais_Artificiais_com_a_biblioteca_Encog_em_Java
+
+https://github.com/encog/encog-java-core/releases
+
+https://github.com/encog/encog-java-core
+
+http://www.heatonresearch.com/download/
+
+https://github.com/encog/encog-java-examples
+
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/guide/classification/IrisClassification.java
+
+https://github.com/encog
+
+https://github.com/encog/encog-java-examples/blob/master/src/main/java/org/encog/examples/neural/xorsql/XORSQL.java

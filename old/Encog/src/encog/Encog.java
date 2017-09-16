@@ -56,31 +56,30 @@ public class Encog {
     public void run(String[] args) {
         try {
             //Arquivo Local - Aprendizado
-            //File irisFile = new File("mamografia.csv");
-            File irisFile = new File("iris.csv");
+            File irisFile = new File("mamografiaSemIdade.csv");
+            //File irisFile = new File("iris.csv");
 
             // Define o formato da base de dados
             VersatileDataSource source = new CSVDataSource(irisFile, false, CSVFormat.DECIMAL_POINT);
             VersatileMLDataSet data = new VersatileMLDataSet(source);
 
             // Colunas da base de dados (nome, indice e tipo)
-            
+            /*
             data.defineSourceColumn("sepal-length", 0, ColumnType.continuous);
             data.defineSourceColumn("sepal-width", 1, ColumnType.continuous);
             data.defineSourceColumn("petal-length", 2, ColumnType.continuous);
             data.defineSourceColumn("petal-width", 3, ColumnType.continuous);
-            
-
-            /*
-            data.defineSourceColumn("BI-RADS", 0, ColumnType.continuous);
-            data.defineSourceColumn("Idade", 1, ColumnType.ignore);
-            data.defineSourceColumn("Forma", 2, ColumnType.continuous);
-            data.defineSourceColumn("Margem", 3, ColumnType.continuous);
-            data.defineSourceColumn("Densidade", 4, ColumnType.continuous);
             */
+
+            data.defineSourceColumn("BI-RADS", 0, ColumnType.continuous);
+            //data.defineSourceColumn("Idade", 1, ColumnType.ignore);
+            data.defineSourceColumn("Forma", 1, ColumnType.continuous);
+            data.defineSourceColumn("Margem", 2, ColumnType.continuous);
+            data.defineSourceColumn("Densidade", 3, ColumnType.continuous);
+            
             // Coluna Resultado Pretendido (nome, indice e tipo).
-            ColumnDefinition outputColumn = data.defineSourceColumn("species", 4, ColumnType.nominal);
-            //ColumnDefinition outputColumn = data.defineSourceColumn("Giagnostico", 5, ColumnType.continuous);
+            //ColumnDefinition outputColumn = data.defineSourceColumn("species", 4, ColumnType.nominal);
+            ColumnDefinition outputColumn = data.defineSourceColumn("Diagnostico", 4, ColumnType.continuous);
 
             // Analise dos dados
             data.analyze();
@@ -115,7 +114,7 @@ public class Encog {
             model.selectTrainingType(data);
 
             // numero de vezes que roda para aprender.
-            MLRegression bestMethod = (MLRegression) model.crossvalidate(1, true);
+            MLRegression bestMethod = (MLRegression) model.crossvalidate(2, true);
             //Backpropagation bp = (Backpropagation) model.crossvalidate(5, true);
 
             // Display the training and validation errors.
@@ -138,6 +137,8 @@ public class Encog {
             String[] line = new String[4];
             MLData input = helper.allocateInputVector();
 
+            
+            
             while (csv.next()) {
                 StringBuilder result = new StringBuilder();
                 line[0] = csv.get(0);

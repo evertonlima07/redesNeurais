@@ -1,0 +1,26 @@
+A mamografia é o método mais eficaz para o rastreio do câncer de mama Disponível hoje. No entanto, o baixo valor preditivo positivo da mama A biópsia resultante da interpretação da mamografia leva a aproximadamente 70% de biópsias desnecessárias com resultados benignos. Para reduzir o alto Número de biópsias de mama desnecessárias, vários diagnósticos auxiliados por computador (CAD) foram propostos nos últimos anos. Esses sistemas Ajudar os médicos na sua decisão de realizar uma biópsia de mama em um suspeito Lesão observada em uma mamografia ou realização de um acompanhamento de curto prazo Exame em vez disso.
+
+Este conjunto de dados pode ser usado para prever a gravidade (benigna ou maligna) De uma lesão de massa mamográfica de atributos de BI-RADS e da idade do paciente. Contém uma avaliação BI-RADS, a idade do paciente e os três atributos BI-RADS Juntamente com a verdade no solo (o campo de gravidade) para 516 benignos e 445 massas malignas que foram identificadas em mamogramas digitais de campo completo Coletado no Instituto de Radiologia do Universidade Erlangen-Nuremberg entre 2003 e 2006.
+
+Cada instância possui uma avaliação BI-RADS associada que varia de 1 (definitivamente benigna) Para 5 (altamente sugestivo de malignidade) atribuído em um processo de revisão Médicos. Supondo que todos os casos com avaliações de BI-RADS sejam maiores ou iguais Um dado valor (variando de 1 a 5), ??são malignos e os outros casos benignos, Sensibilidades e especificidades associadas podem ser calculadas. Estes podem ser um Indicação de quão bem um sistema CAD executa em comparação com os radiologistas.
+
+Distribuição de classe: benigna: 516; Maligno: 445
+
+Amanda Rezende
+6 Atributos no total (1 campo de objetivo, 1 não-preditivo, 4 atributos preditivos)
+
+1. Avaliação BI-RADS: 1 a 5 (ordinal, não-preditivo!)
+2. Idade: idade do paciente em anos (inteiro)
+3. Forma: massa: rodada = 1 oval = 2 lobular = 3 irregular = 4 (nominal)
+4. Margem: margem de massa: circunscrito = 1 microlobulado = 2 obscurecido = 3 mal definido = 4 espiculados = 5 (nominal)
+5. Densidade: densidade de massa alta = 1 iso = 2 baixa = 3 contendo gordura = 4 (ordinal)
+6. Gravidade: benigna = 0 ou maligna = 1 (binômio, campo de gol!)
+
+
+Valores de Atribuição perdidos:
+- Avaliação BI-RADS: 2
+- Idade: 5
+- Forma: 31
+- Margem: 48
+- Densidade: 76
+- Gravidade: 0

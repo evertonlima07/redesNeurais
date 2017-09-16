@@ -31,15 +31,8 @@ public class Encog2 {
 
     public void run(String[] args) {
         try {
-            // Download the data that we will attempt to model.
+            File irisFile = new File("E:/iris.csv");
 
-            File irisFile = new File("iris.csv");
-
-            //Arquivo Local
-            //File irisFile = new File("iris.data");
-            // Define the format of the data file.
-            // This area will change, depending on the columns and 
-            // format of the file that you are trying to model.
             VersatileDataSource source = new CSVDataSource(irisFile, false, CSVFormat.DECIMAL_POINT);
             VersatileMLDataSet data = new VersatileMLDataSet(source);
             data.defineSourceColumn("sepal-length", 0, ColumnType.continuous);
@@ -110,6 +103,7 @@ public class Encog2 {
                 line[1] = csv.get(1);
                 line[2] = csv.get(2);
                 line[3] = csv.get(3);
+                
                 String correct = csv.get(4);
                 helper.normalizeInputVector(line, input.getData(), false);
                 MLData output = bestMethod.compute(input);
@@ -126,7 +120,7 @@ public class Encog2 {
             }
 
             // Delete data file ande shut down.
-            //irisFile.delete();
+            irisFile.delete();
             org.encog.Encog.getInstance().shutdown();
 
         } catch (Exception ex) {

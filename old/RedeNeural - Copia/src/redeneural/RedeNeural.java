@@ -6,16 +6,17 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class RedeNeural {
-    //A Taxa de aprendizado
-    private static double TAXA_APRENDIZADO = 0.3;
 
-    //Representaão os Ws, ou seja, as entradas para cada neuronio
+    //A Taxa de aprendizado
+    private static double TAXA_APRENDIZADO = 0.5;
+
+    //Representão os Ws, ou seja, as entradas para cada neuronio
     private double[][] conexoesPrimeiraCamada;
     private double[] conexoesSegundaCamada;
 
     private int numeroNeuroniosPrimeiraCamada;
     private int numeroNeuroniosEntrada;
-    
+
     private int epocas = 0;
 
     //Inicializando o construtor
@@ -26,7 +27,7 @@ public class RedeNeural {
     }
 
     //Ler o arquivo csv mamografia e joga em uma matriz de double
-    public double[][] LerTreino() throws FileNotFoundException {
+    public double[][] LerConjuntoTreinamento() throws FileNotFoundException {
         File treinamento = new File("mamografiaSemIdade.csv");
 
         String linha = new String();
@@ -46,9 +47,9 @@ public class RedeNeural {
 
         return padroes;
     }
-    
+
     //Ler o arquivo csv resultado e joga em um vetor de double
-    public double[] LerResultado() throws FileNotFoundException {
+    public double[] LerValoresEsperados() throws FileNotFoundException {
         File treinamento = new File("resultado.csv");
 
         String linha = new String();
@@ -69,24 +70,32 @@ public class RedeNeural {
     public void treinar(double[][] conjuntoTreinamento, double[] valoresEsperados) {
         //Pode ter 100% de erro.
         double erro = 1.0;
-        //Vou repetir o processo de treinamento ate que obtenha 90% de acerto e as epocas sejam menor que 10 mil
-        while ((Math.abs(erro) > 0.1) && (epocas < 10000)) {
+        //Enquanto o erro for maior que 10% e o numero deepocas menor que 10 mill
+        while ((Math.abs(erro) > 0.05) && (epocas < 10000)) {
             for (int i = 0; i < conjuntoTreinamento[0].length; i++) {
-                //propagarSinalPelaPrimeiraCamada faz a conexção entre a camada atual e a camada seguite
+                //Entrada da segunda camada é o valor passando na conexção entre a camada atual e a camada seguite
                 double[] entradaSegundaCamada = propagarSinalPelaPrimeiraCamada(conjuntoTreinamento, i);
-                
+
                 double valorSaida = propagarSinalPelaSegundaCamada(entradaSegundaCamada);
-                //erro = calcularErro(valoresEsperados, valorSaida, i);
+                //Calcula o valor do Erro
                 erro = valoresEsperados[i] - valorSaida;
-                double gradiente = getGradienteDeRetropopagacao(valorSaida, erro);
-                aprender(conjuntoTreinamento, entradaSegundaCamada, gradiente, i);
+                //Calcula o valor do deslocamento combase no erro e no valor de saida
+                double deslocamento = valorSaida * (1 - valorSaida) * erro;
+
+                /*
+                 * Responsavel por fazer as retropropagações Processo de aprendizado 
+                 * ele volta da segunda cama para a primeira fazendo as devidas correções de 
+                 * acordo com as entradas da segunda camada e o deslocamento
+                 */
+                retropropagarErroPelaSegundaCamada(entradaSegundaCamada, deslocamento);
+                retropropagarErroPelaPrimeiraCamada(conjuntoTreinamento, entradaSegundaCamada, deslocamento, i);
             }
             epocas++;
-            
+
             //Mostra o numero de epocas ate convergir
             System.out.println("Epoca #" + epocas);
             //Mostra o valor do erro
-            System.out.println("erro #"+erro);
+            System.out.println("erro #" + erro);
         }
     }
 
@@ -98,15 +107,15 @@ public class RedeNeural {
             double[] entradaSegundaCamada = getEntradasSegundaCamada(saidasPrimeiraCamada);
             double y = propagarSinalPelaSegundaCamada(entradaSegundaCamada);
             long value = Math.round(y);
-            System.out.println(value);
+            
+            if (value <= 0)
+                System.out.println(value+" Maligno");
+            else
+                System.out.println(value+" Benigno");
         }
     }
 
-    private void aprender(double[][] conjuntoTreinamento, double[] entradaSegundaCamada, double gradiente, int i) {
-        retropropagarErroPelaSegundaCamada(entradaSegundaCamada, gradiente);
-        retropropagarErroPelaPrimeiraCamada(conjuntoTreinamento, entradaSegundaCamada, gradiente, i);
-    }
-
+    //Faz a conexção entre a camada atual e a camada seguite
     private double[] propagarSinalPelaPrimeiraCamada(double[][] conjuntoTreinamento, int i) {
         double[] saidasPrimeiraCamada = getSaidaTreinamentoPrimeiraCamada(conjuntoTreinamento, i);
         return getEntradasSegundaCamada(saidasPrimeiraCamada);
@@ -120,6 +129,7 @@ public class RedeNeural {
         return getFuncaoTransferencia(u);
     }
 
+    //Referencia-se ao valor da saida da primeira camada
     private double[] getEntradasSegundaCamada(double[] saidasPrimeiraCamada) {
         double[] entradaSegundaCamada = Arrays.copyOf(saidasPrimeiraCamada, saidasPrimeiraCamada.length + 1);
         entradaSegundaCamada[entradaSegundaCamada.length - 1] = 1.0;
@@ -150,33 +160,29 @@ public class RedeNeural {
         return saidasPrimeiraCamada;
     }
 
-    private void retropropagarErroPelaPrimeiraCamada(double[][] conjuntoTreinamento, double[] entradaSegundaCamada, double gradiente, int i) {
+    private void retropropagarErroPelaPrimeiraCamada(double[][] conjuntoTreinamento, double[] entradaSegundaCamada, double deslocamento, int i) {
         for (int j = 0; j < entradaSegundaCamada.length - 1; j++) {
             double derivadaFuncaoTransferencia = entradaSegundaCamada[j] * (1.0 - entradaSegundaCamada[j]);
-            double sigma = derivadaFuncaoTransferencia * (conexoesSegundaCamada[j] * gradiente);
+            double sigma = derivadaFuncaoTransferencia * (conexoesSegundaCamada[j] * deslocamento);
             for (int k = 0; k < conexoesPrimeiraCamada[j].length; k++) {
                 conexoesPrimeiraCamada[j][k] += RedeNeural.TAXA_APRENDIZADO * sigma * conjuntoTreinamento[k][i];
             }
         }
     }
 
-    private void retropropagarErroPelaSegundaCamada(double[] entradaSegundaCamada, double gradiente) {
+    /* 
+     * Faz a multiplicação das entradas da segunda camada com o deslocamento e a 
+     * taxa de aprendizado definida e soma ao valor 
+     */
+    private void retropropagarErroPelaSegundaCamada(double[] entradaSegundaCamada, double deslocamento) {
         for (int j = 0; j < conexoesSegundaCamada.length; j++) {
-            conexoesSegundaCamada[j] += RedeNeural.TAXA_APRENDIZADO * entradaSegundaCamada[j] * gradiente;
+            conexoesSegundaCamada[j] += RedeNeural.TAXA_APRENDIZADO * entradaSegundaCamada[j] * deslocamento;
         }
     }
 
-    private double getGradienteDeRetropopagacao(double valorSaida, double erro) {
-        return valorSaida * (1 - valorSaida) * erro;
-    }
-
-    //Graças a ela a função suporta de 0 - 1, ou seja, todos os valores ficam nessa faixa
+    // Determina a flexibilidade da rede
     private double getFuncaoTransferencia(double u) {
         return 1.0 / (1.0 + Math.exp(-u));
-    }
-
-    private double calcularErro(double[] valoresEsperados, double valorSaida, int i) {
-        return valoresEsperados[i] - valorSaida;
     }
 
     private void inicializarConexoesSinapticasDaRede() {
@@ -184,19 +190,24 @@ public class RedeNeural {
         inicializarConexoesDaSegundaCamada();
     }
 
+    //Peso incial
     private void inicializarConexoesDaPrimeiraCamada() {
         conexoesPrimeiraCamada = new double[numeroNeuroniosPrimeiraCamada][numeroNeuroniosEntrada];
         for (int i = 0; i < conexoesPrimeiraCamada.length; i++) {
             for (int j = 0; j < conexoesPrimeiraCamada[i].length; j++) {
-                conexoesPrimeiraCamada[i][j] = Math.random();
+                //conexoesPrimeiraCamada[i][j] = Math.random();
+                conexoesPrimeiraCamada[i][j] = 1.0;
             }
         }
     }
 
+    //Peso incial
     private void inicializarConexoesDaSegundaCamada() {
         conexoesSegundaCamada = new double[numeroNeuroniosPrimeiraCamada + 1];
         for (int i = 0; i < conexoesSegundaCamada.length; i++) {
-            conexoesSegundaCamada[i] = Math.random();
+            //O valor da conexão/peso é gerado de forma eleatoria
+            //conexoesSegundaCamada[i] = Math.random();
+            conexoesSegundaCamada[i] = 1.0;
         }
     }
 
