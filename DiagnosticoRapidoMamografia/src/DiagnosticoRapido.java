@@ -42,7 +42,9 @@ public class DiagnosticoRapido extends JFrame {
 	private JMenuItem itemconftaxa;
 	private JMenuItem itemconferro;
 	private JMenuItem item2;
+	private JMenuItem nepocas;
 	private JButton limpar;
+
 
 	ImageIcon fundo = new ImageIcon(getClass().getResource("mama.png"));
 	int numeroNeuroniosCamadaIntermediaria = 12;
@@ -72,10 +74,11 @@ public class DiagnosticoRapido extends JFrame {
 	 */
 	public DiagnosticoRapido() {
 		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("src//LogoMamografia.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("src//icon.png"));
 		setTitle("DiagnosticoRapido");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(900, 730);
+		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		// Entradas dos numeros de Epocas e da taxa de rro
 		// numeroepocas = new JTextField();
@@ -107,7 +110,9 @@ public class DiagnosticoRapido extends JFrame {
 		item2 = new JMenuItem("Desenvolvedores");
 		itemconftaxa = new JMenuItem("Configurar Taxa de Aprendizado");
 		itemconferro = new JMenuItem("Configurar Taxa de Erro");
+		nepocas = new JMenuItem("Configurar Numero de Epocas");
 		setJMenuBar(menu);
+		menu1.add(nepocas);
 		menu.add(menu1);
 		menu.add(menu2);
 		menu.add(menu3);
@@ -154,7 +159,7 @@ public class DiagnosticoRapido extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String taxaapren = JOptionPane.showInputDialog("Informe a Taxa de Aprendizado!?");
-				RedeNeural.TAXA_APRENDIZADO = Double.parseDouble(taxaapren);
+				rede.TAXA_APRENDIZADO = Double.parseDouble(taxaapren);
 			}
 			
 		});
@@ -165,7 +170,17 @@ public class DiagnosticoRapido extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String taxaerro = JOptionPane.showInputDialog("Informe a Taxa de Erro!?");
-				RedeNeural.erro = Double.parseDouble(taxaerro);
+				rede.erro = Double.parseDouble(taxaerro);
+			}
+			
+		});
+		nepocas.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String epoca = JOptionPane.showInputDialog("Informe o numero de Epocas!?");
+				rede.numeroepocas = Integer.parseInt(epoca);
 			}
 			
 		});
