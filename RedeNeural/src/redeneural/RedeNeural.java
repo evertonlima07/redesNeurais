@@ -95,7 +95,7 @@ public class RedeNeural {
             //Mostra o numero de epocas ate convergir
             System.out.println("Epoca #" + epocas);
             //Mostra o valor do erro
-            System.out.println("erro #" + erro);
+            System.out.println("erro #" + erro + "\n");
         }
     }
 
@@ -109,9 +109,9 @@ public class RedeNeural {
             long value = Math.round(y);
             
             if (value <= 0)
-                System.out.println(value+" Maligno");
-            else
                 System.out.println(value+" Benigno");
+            else
+                System.out.println(value+" Maligno");
         }
     }
 
@@ -195,8 +195,8 @@ public class RedeNeural {
         conexoesPrimeiraCamada = new double[numeroNeuroniosPrimeiraCamada][numeroNeuroniosEntrada];
         for (int i = 0; i < conexoesPrimeiraCamada.length; i++) {
             for (int j = 0; j < conexoesPrimeiraCamada[i].length; j++) {
-                //conexoesPrimeiraCamada[i][j] = Math.random();
-                conexoesPrimeiraCamada[i][j] = 1.0;
+                conexoesPrimeiraCamada[i][j] = Math.random();
+                //conexoesPrimeiraCamada[i][j] = 1.0;
             }
         }
     }
@@ -206,8 +206,8 @@ public class RedeNeural {
         conexoesSegundaCamada = new double[numeroNeuroniosPrimeiraCamada + 1];
         for (int i = 0; i < conexoesSegundaCamada.length; i++) {
             //O valor da conexão/peso é gerado de forma eleatoria
-            //conexoesSegundaCamada[i] = Math.random();
-            conexoesSegundaCamada[i] = 1.0;
+            conexoesSegundaCamada[i] = Math.random();
+            //conexoesSegundaCamada[i] = 1.0;
         }
     }
 
